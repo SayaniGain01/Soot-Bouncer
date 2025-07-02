@@ -1,4 +1,4 @@
-# 🌿 Soot Bounce
+# 🌿 Soot Bouncer
 
 A pixel-perfect, heartwarming twist on the classic Flappy Bird — starring **Soot Sprites** dodging adorable but dangerous **Totoros** in a side-scrolling Ghibli-inspired world.
 
