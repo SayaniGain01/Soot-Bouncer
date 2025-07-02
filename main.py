@@ -2,6 +2,7 @@ import pygame as pg
 import sys,time
 from soot import Soot
 from totoro import Totoro
+from scoreboard import Scoreboard
 pg.init()
 
 class Game:
@@ -36,6 +37,8 @@ class Game:
         self.restart_img = pg.image.load("images/restart.png").convert_alpha()
         self.restart_rect = self.restart_img.get_rect(center=(self.width // 2, self.height // 2))
 
+        self.scoreboard=Scoreboard(font_size=40, position=(20,20), font_path="pixel_font.ttf", screen_width=self.width)
+
         self.gameLoop()
 
     def gameLoop(self):
@@ -68,7 +71,6 @@ class Game:
             pg.display.update()  
             self.clock.tick(60)     #60 frames per sec
 
-    # def check_score(self):
 
     def resetGame(self):
         self.soot=Soot(self.scale_factor)
@@ -77,6 +79,7 @@ class Game:
         self.totoros=[]
         self.spawn_timer=0
         self.has_played_die_sound=False
+        self.scoreboard.reset()
 
 
     def checkCollision(self):
@@ -89,12 +92,6 @@ class Game:
                 return True
             
             if self.soot.rect.bottom>=455:
-                self.is_game_over=True
-                if not self.has_played_die_sound:
-                    self.die_sound.play()
-                    self.has_played_die_sound = True
-                return True
-            if self.soot.rect.top<=0:
                 self.is_game_over=True
                 if not self.has_played_die_sound:
                     self.die_sound.play()
@@ -124,11 +121,16 @@ class Game:
                 self.spawn_timer = 0
                 new_totoro = Totoro()
                 self.totoros.append(new_totoro)
-# Update all existing Totoros
+
         for totoro in self.totoros:
             totoro.update(delta_time)
             totoro.rect.x -= self.move_speed * delta_time  # move left
-# Remove any that go off screen
+
+            if not totoro.passed and totoro.rect.right < self.soot.rect.left:
+                totoro.passed = True
+                self.scoreboard.increase()
+                self.score_sound.play()    
+
         self.totoros = [t for t in self.totoros if not t.rect.right < 0]
 
 
@@ -143,6 +145,8 @@ class Game:
         if self.is_game_over:
             self.win.blit(self.game_over_img,self.game_over_rect)
             self.win.blit(self.restart_img,self.restart_rect)
+        
+        self.scoreboard.draw(self.win)
 
 
     def setUpBg(self):
