@@ -24,6 +24,8 @@ class Totoro:
         self.wait_duration = 1.0
         self.wait_timer = 0.0
 
+        self.passed= False
+
     def update(self, delta_time):   
         if self.state == "rising":
             self.rect.y -= self.rise_speed * delta_time
