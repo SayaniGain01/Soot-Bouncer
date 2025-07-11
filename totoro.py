@@ -10,6 +10,7 @@ class Totoro:
 
         self.image = random.choice([self.img_big, self.img_small])
         self.rect = self.image.get_rect()
+        self.mask = pg.mask.from_surface(self.image)
 
         self.rect.x = 100 + random.randint(0,400)
 
