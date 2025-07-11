@@ -85,20 +85,23 @@ class Game:
     def checkCollision(self):
         for totoro in self.totoros:
             if self.soot.rect.colliderect(totoro.rect):
-                self.is_game_over=True
-                if not self.has_played_die_sound:
-                    self.die_sound.play()
-                    self.has_played_die_sound = True
-                return True
-            
-            if self.soot.rect.bottom>=455:
-                self.is_game_over=True
-                if not self.has_played_die_sound:
-                    self.die_sound.play()
-                    self.has_played_die_sound = True
-                return True
-            
-            return False
+                offset = (totoro.rect.x - self.soot.rect.x, totoro.rect.y - self.soot.rect.y)
+                if self.soot.mask.overlap(totoro.mask, offset):
+                    self.is_game_over = True
+                    if not self.has_played_die_sound:
+                        self.die_sound.play()
+                        self.has_played_die_sound = True
+                    return True
+
+        # Check if soot hit the floor
+        if self.soot.rect.bottom >= 455:
+            self.is_game_over = True
+            if not self.has_played_die_sound:
+                self.die_sound.play()
+                self.has_played_die_sound = True
+            return True
+
+        return False                
             
             
     def updateEverything(self,delta_time):
