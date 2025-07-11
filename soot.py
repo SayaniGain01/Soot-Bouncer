@@ -5,6 +5,7 @@ class Soot(pg.sprite.Sprite):
         super().__init__()
         self.image = pg.transform.scale_by(pg.image.load("images/sootsprite.png").convert_alpha(),scale_factor)
         self.rect = self.image.get_rect(center=(200,300))
+        self.mask = pg.mask.from_surface(self.image)
         self.y_velocity=0
         self.gravity=10
         self.flap_speed = 250
